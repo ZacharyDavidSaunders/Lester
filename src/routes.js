@@ -8,6 +8,7 @@ const router = express.Router();
 
 // Empty route
 router.get('/', [
+  middlewares.corsMiddleware,
   middlewares.getRouteApiLimiter,  
   middlewares.loggingMiddleware], (req, res) => {
   res.status(200).send({
@@ -17,7 +18,7 @@ router.get('/', [
 
 // Search route
 router.get('/search', [
-  middlewares.getRouteApiLimiter,  
+  middlewares.corsMiddleware,  
   middlewares.loggingMiddleware,
   middlewares.searchParamMiddleware], (req, res) => {
   const searchString = req.query.searchString;
