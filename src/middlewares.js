@@ -1,5 +1,5 @@
 const expressRateLimit = require('express-rate-limit');
-const index = require('./index');
+let memoryCache;
 
 const permittedRequestsPerInterval = 50;
 const intervalMinutes = 60;
@@ -49,22 +49,21 @@ function corsMiddleware(req, res, next) {
 /**
  * Checks that search requests have 1+ of the following parameters:
  *  1. Search String
- *  2. Search ID
  * 
  * @param {*} req the request.
  * @param {*} res the response.
  * @param {*} next the next middleware to be executed if request is allowed to proceed.
  */
 function searchParamMiddleware(req, res, next) {
-  const searchId = req.query.searchId;
   const searchString = req.query.searchString;
 
-  if(searchId || searchString){
+  if(searchString){
     next();
   }else{
     res.status(422).send({
-      message: `Error: The search param route requires either a searchString or searchId parameter.`,
+      message: `Error: The search param route requires a searchString parameter.`,
     });
+    res.end();
   }
 }
 

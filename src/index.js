@@ -21,7 +21,6 @@ app.listen(PORT, () => {
   console.log(`${NAME} is now accepting requests on port: ${PORT}`);
 });
 
-module.exports.app = app; // For unit testing
 module.exports.VERSION = VERSION;
 module.exports.PORT = PORT;
 module.exports.NAME = NAME;
