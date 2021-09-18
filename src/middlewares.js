@@ -1,5 +1,4 @@
 const expressRateLimit = require('express-rate-limit');
-let memoryCache;
 
 const permittedRequestsPerInterval = 50;
 const intervalMinutes = 60;
@@ -48,7 +47,7 @@ function corsMiddleware(req, res, next) {
 
 /**
  * Checks that search requests have 1+ of the following parameters:
- *  1. Search String
+ *  1. searchString: a string of length 1 - 50.
  * 
  * @param {*} req the request.
  * @param {*} res the response.
@@ -58,7 +57,15 @@ function searchParamMiddleware(req, res, next) {
   const searchString = req.query.searchString;
 
   if(searchString){
-    next();
+    if(searchString.length > 50){
+      res.status(422).send({
+        message: `Error: The searchString parameter must be of length 1 - 50.`,
+      });
+      res.end();
+    }else{
+      next();
+    }
+    
   }else{
     res.status(422).send({
       message: `Error: The search param route requires a searchString parameter.`,
